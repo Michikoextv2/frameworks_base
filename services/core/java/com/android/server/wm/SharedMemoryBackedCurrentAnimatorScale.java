@@ -28,7 +28,7 @@ import com.android.internal.os.ApplicationSharedMemory;
  */
 final class SharedMemoryBackedCurrentAnimatorScale {
     private boolean mAnimationsDisabled = false;
-    private float mCurrentAnimatorScale = 1.f;
+    private float mCurrentAnimatorScale = 0.5f;
 
     SharedMemoryBackedCurrentAnimatorScale() {
         updateSharedMemoryValue();

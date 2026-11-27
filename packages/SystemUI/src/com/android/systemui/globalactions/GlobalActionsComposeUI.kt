@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.PowerManager
+import android.os.Process
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.WindowManager
@@ -415,6 +416,17 @@ fun GlobalActionsScreen(
         }
     }
 
+    val restartSystemUi = {
+        val sysUiAction = restartActions.firstOrNull {
+            it is GlobalActionsDialogLite.RestartSystemUIAction
+        }
+        if (sysUiAction != null) {
+            onActionClick(sysUiAction)
+        } else {
+            Process.killProcess(Process.myPid())
+        }
+    }
+
     val errorColor = MaterialTheme.colorScheme.error
 
     val handleTileClick: (TileConfig) -> Unit = { tile ->
@@ -455,16 +467,11 @@ fun GlobalActionsScreen(
     }
 
     val handleRestartSystemUiChosen: () -> Unit = {
-        val sysUiAction = restartActions.firstOrNull {
-            it is GlobalActionsDialogLite.RestartSystemUIAction
-        }
         confirmationTitle = "Restart SystemUI"
         confirmationMessage = "Slide to restart"
         confirmationIcon = Icons.Rounded.Refresh
         confirmationColor = VividRed
-        pendingConfirmationAction = {
-            if (sysUiAction != null) onActionClick(sysUiAction)
-        }
+        pendingConfirmationAction = { restartSystemUi() }
         currentView = GlobalActionsView.CONFIRMATION
     }
 
@@ -526,9 +533,6 @@ fun GlobalActionsScreen(
     if (sliderStyle) {
         val restartAction = actions.firstOrNull { it is GlobalActionsDialogLite.RestartAction }
         val shutdownAction = actions.firstOrNull { it is GlobalActionsDialogLite.ShutDownAction }
-        val sysuiAction = restartActions.firstOrNull {
-            it is GlobalActionsDialogLite.RestartSystemUIAction
-        }
         val recoveryAction = restartActions.firstOrNull {
             it is GlobalActionsDialogLite.RestartRecoveryAction
         }
@@ -566,7 +570,7 @@ fun GlobalActionsScreen(
                     SliderPowerMenu(
                         onRestart = { restartAction?.let { onActionClick(it) } },
                         onShutdown = { shutdownAction?.let { onActionClick(it) } },
-                        onRestartSystemUi = { sysuiAction?.let { onActionClick(it) } },
+                        onRestartSystemUi = { restartSystemUi() },
                         onRestartRecovery = { recoveryAction?.let { onActionClick(it) } },
                         onEmergency = emergencyAction?.let { action ->
                             { onActionClick(action) }

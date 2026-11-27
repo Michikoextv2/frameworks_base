@@ -1166,7 +1166,7 @@ public class WindowManagerService extends IWindowManager.Stub
         }
     }
 
-    private static final float DEFAULT_ANIMATION_SCALE = 1.0f;
+    private static final float DEFAULT_ANIMATION_SCALE = 0.5f;
 
     @GuardedBy("mGlobalLock")
     private float mWindowAnimationScaleSetting = DEFAULT_ANIMATION_SCALE;

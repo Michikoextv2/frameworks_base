@@ -88,12 +88,12 @@ constructor(
                     } finally {
                         secureSettings.unregisterContentObserverAsync(observer)
                     }
-                }.map { secureSettings.getFloatForUser(BLUR_RADIUS_SETTING, 34f, userId) }
+                }.map { secureSettings.getFloatForUser(BLUR_RADIUS_SETTING, 4.5f, userId) }
             }
             .stateIn(
                 backgroundScope,
                 SharingStarted.Eagerly,
-                secureSettings.getFloatForUser(BLUR_RADIUS_SETTING, 34f, UserHandle.USER_CURRENT),
+                secureSettings.getFloatForUser(BLUR_RADIUS_SETTING, 4.5f, UserHandle.USER_CURRENT),
             )
 
     val maxBlurRadius: Float
